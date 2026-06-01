@@ -1,0 +1,9 @@
+@model BankViewModel
+@{ ViewData["Title"] = "Add Bank Account"; }
+<div class="card"><div class="card-body">
+<form asp-action="Create" method="post"><div class="row g-3">
+<div class="col-md-6"><label asp-for="BankName" class="form-label"></label><input asp-for="BankName" class="form-control" /></div>
+<div class="col-md-6"><label asp-for="AccountNumber" class="form-label"></label><input asp-for="AccountNumber" class="form-control" /></div>
+<div class="col-md-6"><label asp-for="AccountTitle" class="form-label"></label><input asp-for="AccountTitle" class="form-control" /></div>
+<div class="col-md-6"><label asp-for="OpeningBalance" class="form-label"></label><input asp-for="OpeningBalance" class="form-control" step="0.01" /></div>
+</div><div class="mt-4"><button type="submit" class="btn btn-primary">Save</button></div></form></div></div>

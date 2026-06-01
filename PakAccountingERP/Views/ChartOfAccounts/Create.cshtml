@@ -1,0 +1,10 @@
+@model ChartOfAccountViewModel
+@{ ViewData["Title"] = "Add Account"; }
+<div class="card"><div class="card-header">Add Account</div><div class="card-body">
+<form asp-action="Create" method="post"><div class="row g-3">
+<div class="col-md-4"><label asp-for="AccountNumber" class="form-label"></label><input asp-for="AccountNumber" class="form-control" /></div>
+<div class="col-md-4"><label asp-for="AccountName" class="form-label"></label><input asp-for="AccountName" class="form-control" /></div>
+<div class="col-md-4"><label asp-for="AccountType" class="form-label"></label><select asp-for="AccountType" class="form-select" asp-items="Html.GetEnumSelectList<AccountType>()"></select></div>
+<div class="col-md-6"><label class="form-label">Parent Account</label><select asp-for="ParentAccountId" class="form-select" asp-items="@(new SelectList(ViewBag.ParentAccounts as IEnumerable<ChartOfAccount>, "Id", "AccountName"))"><option value="">None</option></select></div>
+<div class="col-md-6"><label asp-for="Description" class="form-label"></label><input asp-for="Description" class="form-control" /></div>
+</div><div class="mt-4"><button type="submit" class="btn btn-primary">Save</button></div></form></div></div>

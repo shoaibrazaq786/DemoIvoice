@@ -1,0 +1,22 @@
+@model IEnumerable<UserManagementViewModel>
+@{ ViewData["Title"] = "User Management"; }
+<div class="card mb-4"><div class="card-header">Users</div><div class="card-body">
+<table class="table data-table"><thead><tr><th>Email</th><th>Name</th><th>Roles</th><th>Active</th></tr></thead>
+<tbody>@foreach(var u in Model){<tr><td>@u.Email</td><td>@u.FullName</td><td>@string.Join(", ", u.Roles)</td><td>@u.IsActive</td></tr>}</tbody></table>
+</div></div>
+<div class="card"><div class="card-header">Create User</div><div class="card-body">
+<form id="createUserForm"><div class="row g-3">
+<div class="col-md-3"><input type="email" id="email" class="form-control" placeholder="Email" required /></div>
+<div class="col-md-3"><input type="password" id="password" class="form-control" placeholder="Password" required /></div>
+<div class="col-md-3"><input type="text" id="fullName" class="form-control" placeholder="Full Name" /></div>
+<div class="col-md-2"><select id="role" class="form-select">@foreach(var r in ViewBag.Roles as IEnumerable<string>){<option>@r</option>}</select></div>
+<div class="col-md-1"><button type="submit" class="btn btn-primary">Add</button></div>
+</div></form></div></div>
+@section Scripts {
+<script>
+$('#createUserForm').on('submit', function(e){ e.preventDefault();
+$.post('/UserManagement/CreateUser', { email: $('#email').val(), password: $('#password').val(), fullName: $('#fullName').val(), role: $('#role').val(), companyId: 1 })
+.done(r => { if(r.success){ PakERP.showToast('User created'); location.reload(); } else PakERP.showToast(r.message,'error'); });
+});
+PakERP.initDataTable('.data-table');
+</script>}

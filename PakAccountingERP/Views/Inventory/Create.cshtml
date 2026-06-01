@@ -1,0 +1,14 @@
+@model ItemViewModel
+@{ ViewData["Title"] = "Add Item"; }
+<div class="card"><div class="card-header">Add Item</div><div class="card-body">
+<form asp-action="Create" method="post"><div class="row g-3">
+<div class="col-md-4"><label asp-for="ItemCode" class="form-label"></label><input asp-for="ItemCode" class="form-control" /></div>
+<div class="col-md-4"><label asp-for="ItemName" class="form-label"></label><input asp-for="ItemName" class="form-control" /></div>
+<div class="col-md-4"><label asp-for="HSCode" class="form-label"></label><input asp-for="HSCode" class="form-control" /></div>
+<div class="col-md-4"><label class="form-label">Unit</label><select asp-for="UnitOfMeasureId" class="form-select" asp-items="@(new SelectList(ViewBag.Units as IEnumerable<UnitOfMeasure>, "Id", "Name"))"></select></div>
+<div class="col-md-4"><label asp-for="PurchaseRate" class="form-label"></label><input asp-for="PurchaseRate" class="form-control" step="0.01" /></div>
+<div class="col-md-4"><label asp-for="SaleRate" class="form-label"></label><input asp-for="SaleRate" class="form-control" step="0.01" /></div>
+<div class="col-md-4"><label asp-for="MinimumStock" class="form-label"></label><input asp-for="MinimumStock" class="form-control" /></div>
+<div class="col-md-4"><label asp-for="ReorderLevel" class="form-label"></label><input asp-for="ReorderLevel" class="form-control" /></div>
+<div class="col-md-4"><label asp-for="CostingMethod" class="form-label"></label><select asp-for="CostingMethod" class="form-select" asp-items="Html.GetEnumSelectList<CostingMethod>()"></select></div>
+</div><div class="mt-4"><button type="submit" class="btn btn-primary">Save</button></div></form></div></div>

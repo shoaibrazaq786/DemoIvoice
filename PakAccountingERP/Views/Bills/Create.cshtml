@@ -1,0 +1,39 @@
+@model BillViewModel
+@{ ViewData["Title"] = "Enter Bill"; var vendors = ViewBag.Vendors as IEnumerable<Vendor>; var items = ViewBag.Items as IEnumerable<Item>; }
+<div class="card"><div class="card-header">Enter Bill</div><div class="card-body">
+@Html.AntiForgeryToken()
+<div class="row g-3 mb-3">
+<div class="col-md-4"><label class="form-label">Vendor</label><select id="VendorId" class="form-select">@foreach(var v in vendors!){<option value="@v.Id">@v.VendorName</option>}</select></div>
+<div class="col-md-4"><label class="form-label">Date</label><input type="date" id="BillDate" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" /></div>
+<div class="col-md-4"><label class="form-label">Ref No</label><input type="text" id="RefNo" class="form-control" /></div>
+</div>
+<table class="table" id="billLines"><thead><tr><th>Item</th><th>Description</th><th>Qty</th><th>Cartons</th><th>Rate</th><th>Amount</th><th>Tax</th></tr></thead>
+<tbody><tr>
+<td><select class="form-select form-select-sm item-select">@foreach(var i in items!){<option value="@i.Id">@i.ItemName</option>}</select></td>
+<td><input class="form-control form-control-sm description" /></td>
+<td><input class="form-control form-control-sm qty" type="number" step="0.01" /></td>
+<td><input class="form-control form-control-sm cartons" type="number" step="0.01" /></td>
+<td><input class="form-control form-control-sm rate" type="number" step="0.01" /></td>
+<td><input class="form-control form-control-sm amount" readonly /></td>
+<td><input class="form-control form-control-sm tax-amount" readonly /><input type="hidden" class="tax-rate" value="18" /></td>
+</tr></tbody></table>
+<div class="invoice-totals mt-3">
+<div class="d-flex justify-content-between"><span>Sub Total:</span><span id="BillSubTotal">Rs. 0.00</span></div>
+<div class="d-flex justify-content-between"><span>Tax:</span><span id="BillTaxAmount">Rs. 0.00</span></div>
+<div class="d-flex justify-content-between fw-bold"><span>Net:</span><span id="BillNetAmount">Rs. 0.00</span></div>
+</div>
+<button type="button" class="btn btn-primary mt-3" id="saveBill">Save Bill</button>
+</div></div>
+@section Scripts {
+<script>
+$('#billLines input').on('input', BillCalc.calculateTotals);
+$('#saveBill').on('click', function() {
+    const lines = []; $('#billLines tbody tr').each(function() {
+        lines.push({ itemId: parseInt($(this).find('.item-select').val()), description: $(this).find('.description').val(),
+            quantity: parseFloat($(this).find('.qty').val())||0, cartons: parseFloat($(this).find('.cartons').val())||0,
+            rate: parseFloat($(this).find('.rate').val())||0, taxRate: 18 });
+    });
+    PakERP.ajaxPost('/Bills/Save', { vendorId: parseInt($('#VendorId').val()), billDate: $('#BillDate').val(), refNo: $('#RefNo').val(), lines }, 
+        r => { PakERP.showToast('Bill saved'); window.location='/Bills'; });
+});
+</script>}

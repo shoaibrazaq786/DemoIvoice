@@ -1,0 +1,71 @@
+@model SalesInvoice
+@{
+    ViewData["Title"] = "Print Invoice";
+    Layout = "_Layout";
+    var company = ViewBag.Company as Company;
+}
+<div class="card" id="printArea">
+    <div class="card-body">
+        <div class="row mb-4">
+            <div class="col-6">
+                <h3>@company?.CompanyName</h3>
+                <p>@company?.Address<br />NTN: @company?.NTN | STRN: @company?.STRN</p>
+            </div>
+            <div class="col-6 text-end">
+                @if (!string.IsNullOrEmpty(Model.FbrQrCodeData))
+                {
+                    <img src="/Invoices/QrCode?data=@Uri.EscapeDataString(Model.FbrQrCodeData)" alt="FBR QR" width="120" />
+                }
+                <h4>Sales Invoice</h4>
+                <p>Invoice #: <strong>@Model.InvoiceNumber</strong><br />
+                FBR #: <strong>@Model.FbrInvoiceNumber</strong><br />
+                Date: @Model.InvoiceDate.ToString("dd-MMM-yyyy")</p>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-6">
+                <strong>Buyer:</strong> @Model.Customer?.BuyerName<br />
+                @Model.BuyerAddress<br />
+                NTN/CNIC: @(Model.BuyerNTN ?? Model.BuyerCNIC)
+            </div>
+            <div class="col-6 text-end">
+                Province: @Model.Province?.Name<br />
+                Type: @Model.InvoiceType
+            </div>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th><th>Description</th><th>HS Code</th><th>Qty</th><th>Price</th><th>Tax</th><th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ var i = 1; }
+                @foreach (var line in Model.Items)
+                {
+                    <tr>
+                        <td>@i++</td>
+                        <td>@line.ProductDescription</td>
+                        <td>@line.HSCode</td>
+                        <td>@line.Quantity @line.UnitOfMeasure?.Name</td>
+                        <td class="currency">@line.Price.ToString("N2")</td>
+                        <td class="currency">@line.TaxAmount.ToString("N2")</td>
+                        <td class="currency">@line.LineTotal.ToString("N2")</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr><td colspan="6" class="text-end">Sub Total</td><td class="currency">@Model.SubTotal.ToString("N2")</td></tr>
+                <tr><td colspan="6" class="text-end">Tax</td><td class="currency">@Model.TaxAmount.ToString("N2")</td></tr>
+                <tr><td colspan="6" class="text-end"><strong>Net Total</strong></td><td class="currency"><strong>@Model.NetTotal.ToString("N2")</strong></td></tr>
+            </tfoot>
+        </table>
+        @if (!string.IsNullOrEmpty(Model.FbrResponseJson))
+        {
+            <p class="small text-muted">FBR Verified Invoice</p>
+        }
+    </div>
+</div>
+<div class="no-print mt-3">
+    <button onclick="window.print()" class="btn btn-primary"><i class="fas fa-print"></i> Print</button>
+</div>

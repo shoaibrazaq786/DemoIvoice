@@ -1,0 +1,10 @@
+@{ ViewData["Title"] = "Reports"; }
+<div class="row g-3">
+@foreach (var r in new[] {
+    ("Daily Sales", "/Reports/DailySales"), ("Monthly Sales", "/Reports/MonthlySales"),
+    ("Sales Tax", "/Reports/SalesTax"), ("Trial Balance", "/Reports/TrialBalance"),
+    ("Profit & Loss", "/Reports/ProfitAndLoss"), ("Balance Sheet", "/Reports/BalanceSheet")
+}) {
+<div class="col-md-4"><a href="@r.Item2" class="dashboard-card"><i class="fas fa-chart-line"></i><h6>@r.Item1</h6></a></div>
+}
+</div>

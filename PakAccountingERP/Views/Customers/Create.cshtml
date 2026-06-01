@@ -1,0 +1,28 @@
+@model CustomerViewModel
+@{ ViewData["Title"] = Model.Id > 0 ? "Edit Customer" : "Add Customer"; }
+<div class="card">
+    <div class="card-header">@ViewData["Title"]</div>
+    <div class="card-body">
+        <form asp-action="@(Model.Id > 0 ? "Edit" : "Create")" method="post">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="BuyerId" />
+            <div class="row g-3">
+                <div class="col-md-6"><label asp-for="BuyerName" class="form-label"></label><input asp-for="BuyerName" class="form-control" /></div>
+                <div class="col-md-6"><label asp-for="OpeningBalance" class="form-label"></label><input asp-for="OpeningBalance" class="form-control" step="0.01" /></div>
+                <div class="col-12"><label asp-for="Address" class="form-label"></label><textarea asp-for="Address" class="form-control"></textarea></div>
+                <div class="col-md-4"><label class="form-label">Province</label><select asp-for="ProvinceId" class="form-select" asp-items="@(new SelectList(ViewBag.Provinces as IEnumerable<Province>, "Id", "Name"))"><option value="">Select</option></select></div>
+                <div class="col-md-4"><label asp-for="Phone" class="form-label"></label><input asp-for="Phone" class="form-control" /></div>
+                <div class="col-md-4"><label asp-for="Mobile" class="form-label"></label><input asp-for="Mobile" class="form-control" /></div>
+                <div class="col-md-4"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" /></div>
+                <div class="col-md-4"><label asp-for="NTN" class="form-label"></label><input asp-for="NTN" class="form-control" /></div>
+                <div class="col-md-4"><label asp-for="CNIC" class="form-label"></label><input asp-for="CNIC" class="form-control" /></div>
+                <div class="col-md-4"><label asp-for="STRN" class="form-label"></label><input asp-for="STRN" class="form-control" /></div>
+                <div class="col-md-4"><label asp-for="CustomerType" class="form-label"></label><select asp-for="CustomerType" class="form-select" asp-items="Html.GetEnumSelectList<CustomerType>()"></select></div>
+                <div class="col-md-4"><label asp-for="SalesType" class="form-label"></label><select asp-for="SalesType" class="form-select" asp-items="Html.GetEnumSelectList<SalesType>()"></select></div>
+                <div class="col-md-4"><label asp-for="InvoiceType" class="form-label"></label><select asp-for="InvoiceType" class="form-select" asp-items="Html.GetEnumSelectList<InvoiceTypeEnum>()"></select></div>
+            </div>
+            <div class="mt-4"><button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="Index" class="btn btn-outline-light">Cancel</a></div>
+        </form>
+    </div>
+</div>

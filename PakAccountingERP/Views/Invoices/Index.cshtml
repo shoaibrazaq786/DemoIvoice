@@ -1,0 +1,21 @@
+@model IEnumerable<SalesInvoice>
+@{ ViewData["Title"] = "Invoices"; }
+<div class="d-flex justify-content-between mb-4">
+    <h4><i class="fas fa-file-invoice"></i> Sales Invoices</h4>
+    <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i> New Invoice</a>
+</div>
+<div class="card"><div class="card-body">
+<table class="table table-striped data-table">
+<thead><tr><th>Invoice #</th><th>Customer</th><th>Date</th><th>Net Total</th><th>FBR Status</th><th>Actions</th></tr></thead>
+<tbody>
+@foreach (var i in Model) {
+<tr>
+<td>@i.InvoiceNumber</td><td>@i.Customer?.BuyerName</td><td>@i.InvoiceDate.ToString("dd-MMM-yyyy")</td>
+<td class="currency">@i.NetTotal.ToString("N2")</td><td>@i.FbrStatus</td>
+<td>
+<a asp-action="Edit" asp-route-id="@i.Id" class="btn btn-sm btn-outline-light"><i class="fas fa-edit"></i></a>
+<a asp-action="Print" asp-route-id="@i.Id" class="btn btn-sm btn-outline-light" target="_blank"><i class="fas fa-print"></i></a>
+<a asp-action="DownloadPdf" asp-route-id="@i.Id" class="btn btn-sm btn-outline-light"><i class="fas fa-file-pdf"></i></a>
+</td></tr>}
+</tbody></table></div></div>
+@section Scripts { <script>PakERP.initDataTable('.data-table');</script> }

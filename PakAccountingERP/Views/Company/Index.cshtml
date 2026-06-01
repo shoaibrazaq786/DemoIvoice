@@ -1,0 +1,30 @@
+@model IEnumerable<PakAccountingERP.Models.Company>
+@{
+    ViewData["Title"] = "Companies";
+}
+<div class="d-flex justify-content-between mb-4">
+    <h4><i class="fas fa-building"></i> Companies</h4>
+    <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i> Add Company</a>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-striped data-table">
+            <thead>
+                <tr><th>Name</th><th>NTN</th><th>Province</th><th>Phone</th><th>Default</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var c in Model)
+                {
+                    <tr>
+                        <td>@c.CompanyName</td>
+                        <td>@c.NTN</td>
+                        <td>@c.Province?.Name</td>
+                        <td>@c.Phone</td>
+                        <td>@(c.IsDefault ? "Yes" : "No")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section Scripts { <script>PakERP.initDataTable('.data-table');</script> }

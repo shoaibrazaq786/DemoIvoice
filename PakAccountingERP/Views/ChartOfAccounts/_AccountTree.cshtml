@@ -1,0 +1,14 @@
+@model List<ChartOfAccountViewModel>
+<ul class="tree-view">
+@foreach (var account in Model)
+{
+    <li>
+        <strong>@account.AccountNumber</strong> - @account.AccountName
+        <span class="badge bg-secondary ms-2">@account.AccountType</span>
+        @if (account.Children.Any())
+        {
+            @await Html.PartialAsync("_AccountTree", account.Children)
+        }
+    </li>
+}
+</ul>

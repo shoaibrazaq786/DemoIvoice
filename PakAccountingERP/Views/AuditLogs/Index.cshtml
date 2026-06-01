@@ -1,0 +1,9 @@
+@model IEnumerable<AuditLog>
+@{ ViewData["Title"] = "Audit Logs"; }
+<div class="card"><div class="card-body">
+<table class="table table-striped data-table">
+<thead><tr><th>Date</th><th>User</th><th>Action</th><th>Table</th><th>Record</th><th>IP</th></tr></thead>
+<tbody>@foreach (var l in Model) {
+<tr><td>@l.ActionDate.ToString("dd-MMM-yyyy HH:mm")</td><td>@l.UserName</td><td>@l.Action</td><td>@l.TableName</td><td>@l.RecordId</td><td>@l.IPAddress</td></tr>}
+</tbody></table></div></div>
+@section Scripts { <script>PakERP.initDataTable('.data-table');</script> }

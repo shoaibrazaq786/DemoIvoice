@@ -1,0 +1,8 @@
+@{ ViewData["Title"] = "Settings"; }
+<div class="row g-3">
+<a href="/Settings/CompanySettings" class="col-md-4 dashboard-card"><i class="fas fa-building"></i><h6>Company Settings</h6></a>
+<a href="/Settings/SecuritySettings" class="col-md-4 dashboard-card"><i class="fas fa-shield-alt"></i><h6>Security Settings</h6></a>
+<button class="col-md-4 dashboard-card border-0" id="backupBtn"><i class="fas fa-database"></i><h6>Database Backup</h6></button>
+</div>
+@section Scripts {
+<script>$('#backupBtn').on('click',()=>$.post('/Settings/BackupDatabase').done(r=>PakERP.showToast(r.message||'Backup initiated')));</script>}

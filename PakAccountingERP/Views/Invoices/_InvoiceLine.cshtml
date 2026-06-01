@@ -1,0 +1,35 @@
+@model InvoiceLineViewModel
+@{
+    var items = ViewData["Items"] as IEnumerable<Item>;
+    var units = ViewData["Units"] as IEnumerable<UnitOfMeasure>;
+}
+<tr>
+    <td>
+        <select class="form-select form-select-sm item-select">
+            <option value="">Select</option>
+            @foreach (var item in items ?? Enumerable.Empty<Item>())
+            {
+                <option value="@item.Id" data-hs="@item.HSCode" data-price="@item.SaleRate" data-name="@item.ItemName"
+                        selected="@(Model.ItemId == item.Id)">@item.ItemCode - @item.ItemName</option>
+            }
+        </select>
+    </td>
+    <td><input type="text" class="form-control form-control-sm hs-code" value="@Model.HSCode" /></td>
+    <td><input type="text" class="form-control form-control-sm description" value="@Model.ProductDescription" /></td>
+    <td>
+        <select class="form-select form-select-sm unit-select">
+            @foreach (var u in units ?? Enumerable.Empty<UnitOfMeasure>())
+            {
+                <option value="@u.Id" selected="@(Model.UnitOfMeasureId == u.Id)">@u.Name</option>
+            }
+        </select>
+    </td>
+    <td><input type="number" class="form-control form-control-sm qty" step="0.01" value="@Model.Quantity" /></td>
+    <td><input type="number" class="form-control form-control-sm cartons" step="0.01" value="@Model.Cartons" /></td>
+    <td><input type="number" class="form-control form-control-sm price" step="0.01" value="@Model.Price" /></td>
+    <td><input type="number" class="form-control form-control-sm tax-rate" step="0.01" value="@(Model.TaxRate > 0 ? Model.TaxRate : 18)" /></td>
+    <td><input type="number" class="form-control form-control-sm tax-amount" readonly value="@Model.TaxAmount" /></td>
+    <td><input type="number" class="form-control form-control-sm discount" step="0.01" value="@Model.Discount" /></td>
+    <td><input type="number" class="form-control form-control-sm line-total" readonly value="@Model.LineTotal" /></td>
+    <td><button type="button" class="btn btn-danger btn-sm remove-row"><i class="fas fa-trash"></i></button></td>
+</tr>

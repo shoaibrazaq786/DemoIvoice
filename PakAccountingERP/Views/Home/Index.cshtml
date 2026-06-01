@@ -1,0 +1,144 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+<div class="mb-4">
+    <h3>Welcome to @ViewBag.CompanyName</h3>
+    <p class="text-muted">Pakistan Accounting ERP Dashboard</p>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4 col-lg-2">
+        <div class="stat-card">
+            <div class="stat-label">Daily Sales</div>
+            <div class="stat-value currency">@Model.DailySales.ToString("N2")</div>
+        </div>
+    </div>
+    <div class="col-md-4 col-lg-2">
+        <div class="stat-card">
+            <div class="stat-label">Monthly Sales</div>
+            <div class="stat-value currency">@Model.MonthlySales.ToString("N2")</div>
+        </div>
+    </div>
+    <div class="col-md-4 col-lg-2">
+        <div class="stat-card">
+            <div class="stat-label">Inventory Value</div>
+            <div class="stat-value currency">@Model.InventoryValue.ToString("N2")</div>
+        </div>
+    </div>
+    <div class="col-md-4 col-lg-2">
+        <div class="stat-card">
+            <div class="stat-label">Receivables</div>
+            <div class="stat-value currency">@Model.OutstandingReceivables.ToString("N2")</div>
+        </div>
+    </div>
+    <div class="col-md-4 col-lg-2">
+        <div class="stat-card">
+            <div class="stat-label">Payables</div>
+            <div class="stat-value currency">@Model.OutstandingPayables.ToString("N2")</div>
+        </div>
+    </div>
+    <div class="col-md-4 col-lg-2">
+        <div class="stat-card">
+            <div class="stat-label">Tax Summary</div>
+            <div class="stat-value currency">@Model.TaxSummary.ToString("N2")</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">Sales Trend (Last 7 Days)</div>
+            <div class="card-body">
+                <canvas id="salesChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card mb-3">
+            <div class="card-header">Top Customers</div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    @foreach (var c in Model.TopCustomers)
+                    {
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>@c.Name</span>
+                            <span class="currency">@c.Amount.ToString("N2")</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">Top Selling Items</div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    @foreach (var i in Model.TopItems)
+                    {
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>@i.Name</span>
+                            <span class="currency">@i.Amount.ToString("N2")</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h5 class="mb-3">Quick Access</h5>
+<div class="row g-3">
+    @foreach (var module in new[] {
+        ("Company", "fa-building", "/Company"),
+        ("Settings", "fa-cog", "/Settings"),
+        ("Create Invoice", "fa-file-invoice", "/Invoices/Create"),
+        ("Enter Bills", "fa-file-invoice-dollar", "/Bills/Create"),
+        ("Banking", "fa-university", "/Banking"),
+        ("Reports", "fa-chart-bar", "/Reports"),
+        ("Inventory", "fa-boxes", "/Inventory"),
+        ("Customers", "fa-users", "/Customers"),
+        ("Vendors", "fa-truck", "/Vendors"),
+        ("Chart Of Accounts", "fa-sitemap", "/ChartOfAccounts"),
+        ("Sales Tax", "fa-percent", "/TaxSettings"),
+        ("Audit Logs", "fa-history", "/AuditLogs"),
+        ("User Management", "fa-user-shield", "/UserManagement"),
+        ("Bank Reconciliation", "fa-balance-scale", "/BankReconciliation")
+    })
+    {
+        <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+            <a href="@module.Item3" class="dashboard-card">
+                <i class="fas @module.Item2"></i>
+                <h6>@module.Item1</h6>
+            </a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+<script>
+    const salesData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.SalesChart));
+    new Chart(document.getElementById('salesChart'), {
+        type: 'line',
+        data: {
+            labels: salesData.map(d => d.label),
+            datasets: [{
+                label: 'Sales (PKR)',
+                data: salesData.map(d => d.value),
+                borderColor: '#1976d2',
+                backgroundColor: 'rgba(25, 118, 210, 0.12)',
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { labels: { color: '#1a2b3c' } } },
+            scales: {
+                x: { ticks: { color: '#5a6f82' }, grid: { color: '#cfe3f5' } },
+                y: { ticks: { color: '#5a6f82' }, grid: { color: '#cfe3f5' } }
+            }
+        }
+    });
+</script>
+}

@@ -1,0 +1,12 @@
+@model IEnumerable<Bank>
+@{ ViewData["Title"] = "Banking"; }
+<div class="d-flex justify-content-between mb-4">
+    <h4><i class="fas fa-university"></i> Bank Accounts</h4>
+    <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i> Add Bank</a>
+</div>
+<div class="card"><div class="card-body">
+<table class="table data-table"><thead><tr><th>Bank</th><th>Account #</th><th>Title</th><th>Balance</th><th>Actions</th></tr></thead>
+<tbody>@foreach(var b in Model){<tr><td>@b.BankName</td><td>@b.AccountNumber</td><td>@b.AccountTitle</td><td class="currency">@b.CurrentBalance.ToString("N2")</td>
+<td><a asp-action="Transaction" asp-route-bankId="@b.Id" class="btn btn-sm btn-outline-light">Txn</a>
+<a asp-action="Ledger" asp-route-bankId="@b.Id" class="btn btn-sm btn-outline-light">Ledger</a></td></tr>}</tbody></table></div></div>
+@section Scripts { <script>PakERP.initDataTable('.data-table');</script> }

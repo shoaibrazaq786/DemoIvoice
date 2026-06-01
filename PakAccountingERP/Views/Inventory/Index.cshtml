@@ -1,0 +1,20 @@
+@model IEnumerable<Item>
+@{ ViewData["Title"] = "Inventory"; }
+<div class="d-flex justify-content-between mb-4">
+    <h4><i class="fas fa-boxes"></i> Inventory</h4>
+    <div>
+        <a asp-action="StockIn" class="btn btn-outline-light btn-sm">Stock In</a>
+        <a asp-action="LowStock" class="btn btn-outline-light btn-sm">Low Stock</a>
+        <a asp-action="Valuation" class="btn btn-outline-light btn-sm">Valuation</a>
+        <a asp-action="Create" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Add Item</a>
+    </div>
+</div>
+<div class="card"><div class="card-body">
+<table class="table table-striped data-table">
+<thead><tr><th>Code</th><th>Name</th><th>HS Code</th><th>Unit</th><th>Stock</th><th>Sale Rate</th><th>Actions</th></tr></thead>
+<tbody>@foreach (var i in Model) {
+<tr><td>@i.ItemCode</td><td>@i.ItemName</td><td>@i.HSCode</td><td>@i.UnitOfMeasure?.Name</td>
+<td>@i.CurrentStock</td><td class="currency">@i.SaleRate.ToString("N2")</td>
+<td><a asp-action="Ledger" asp-route-itemId="@i.Id" class="btn btn-sm btn-outline-light"><i class="fas fa-book"></i></a></td></tr>}
+</tbody></table></div></div>
+@section Scripts { <script>PakERP.initDataTable('.data-table');</script> }

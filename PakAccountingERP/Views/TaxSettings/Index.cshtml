@@ -1,0 +1,10 @@
+@model IEnumerable<TaxSetting>
+@{ ViewData["Title"] = "Sales Tax Settings"; }
+<div class="d-flex justify-content-between mb-4">
+    <h4><i class="fas fa-percent"></i> Sales Tax Settings</h4>
+    <a asp-action="Create" class="btn btn-primary">Add Group</a>
+</div>
+<div class="card"><div class="card-body">
+<table class="table data-table"><thead><tr><th>Group</th><th>Registered Rate</th><th>Unregistered Rate</th><th>Description</th></tr></thead>
+<tbody>@foreach(var t in Model){<tr><td>@t.GroupName</td><td>@t.SalesTaxRate%</td><td>@t.UnregisteredSalesTaxRate%</td><td>@t.Description</td></tr>}</tbody></table></div></div>
+@section Scripts { <script>PakERP.initDataTable('.data-table');</script> }
